@@ -33,7 +33,7 @@ def users():
 # ----------------------
 # Add New User
 # ----------------------
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/new_user', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
         name = request.form['name']
