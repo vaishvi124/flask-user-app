@@ -1,3 +1,7 @@
+SQLALCHEMY_DATABASE_URI = 'sqlite:///users.db'
+
+
+
 import mysql.connector
 
 def get_db_connection():

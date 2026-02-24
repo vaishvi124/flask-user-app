@@ -3,12 +3,24 @@ from db_config import get_db_connection
 
 app = Flask(__name__)
 
+# ----------------------
+# Home Route
+# ----------------------
+@app.route('/')
+def home():
+    # Redirect to users page
+    return redirect(url_for('users'))
+
+# ----------------------
 # Hello Route
+# ----------------------
 @app.route('/hello')
 def hello():
     return "Hello World!"
 
+# ----------------------
 # Show All Users
+# ----------------------
 @app.route('/users')
 def users():
     conn = get_db_connection()
@@ -18,7 +30,9 @@ def users():
     conn.close()
     return render_template('users.html', users=users)
 
+# ----------------------
 # Add New User
+# ----------------------
 @app.route('/add', methods=['GET', 'POST'])
 def add_user():
     if request.method == 'POST':
@@ -38,6 +52,9 @@ def add_user():
 
     return render_template('new_user.html')
 
+# ----------------------
+# User Detail Page
+# ----------------------
 @app.route('/users/<int:id>')
 def user_detail(id):
     conn = get_db_connection()
@@ -45,13 +62,13 @@ def user_detail(id):
     cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
     user = cursor.fetchone()
     conn.close()
+    if user:
+        return render_template('user_detail.html', user=user)
+    else:
+        return "User not found", 404
 
-    if user is None:
-        return render_template('error.html', message="User not found")
-
-    return render_template('user_detail.html', user=user)
-
-# Run Server (ALWAYS LAST)
-if __name__ == '__main__':
-    app.run(debug=True)
-
+# ----------------------
+# Run App
+# ----------------------
+if __name__ == "__main__":
+    app.run(debug=True,port=5001)
